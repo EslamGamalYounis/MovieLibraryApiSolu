@@ -46,10 +46,6 @@ namespace MovieLibraryApi.Models
                 .WithMany(p => p.FavMovies)
                 .HasForeignKey(pt => pt.UserId);
 
-            modelBuilder.Entity<UserFavouriteMovie>()
-                .HasOne(pt => pt.Movie)
-                .WithMany(t => t.UserFavouriteMovies)
-                .HasForeignKey(pt => pt.MovieId);
         }
 
     }

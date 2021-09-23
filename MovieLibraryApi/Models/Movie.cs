@@ -17,6 +17,5 @@ namespace MovieLibraryApi.Models
         public DateTime ReleaseDate { get; set; }
         public double Rating { get; set; }
         public byte[] Image { get; set; }
-        public virtual IEnumerable<UserFavouriteMovie> UserFavouriteMovies { get; set; }
     }
 }

@@ -103,7 +103,7 @@ namespace MovieLibraryApi.Migrations
             modelBuilder.Entity("MovieLibraryApi.Models.UserFavouriteMovie", b =>
                 {
                     b.HasOne("MovieLibraryApi.Models.Movie", "Movie")
-                        .WithMany("UserFavouriteMovies")
+                        .WithMany()
                         .HasForeignKey("MovieId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -117,11 +117,6 @@ namespace MovieLibraryApi.Migrations
                     b.Navigation("Movie");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("MovieLibraryApi.Models.Movie", b =>
-                {
-                    b.Navigation("UserFavouriteMovies");
                 });
 
             modelBuilder.Entity("MovieLibraryApi.Models.User", b =>
