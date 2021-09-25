@@ -4,6 +4,7 @@ using MovieLibraryApi.Models;
 using MovieLibraryApi.Repositories;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -38,14 +39,25 @@ namespace MovieLibraryApi.Controllers
         }
 
         [HttpPost("{movie}")]
-        public IActionResult Add(Movie movie)
+        public IActionResult Add([FromForm]Movie movie)
         {
+            var file = Request.Form.Files[0];
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            movieRepo.Add(movie);
+            if (file != null)
+            {
+                using (var datastream = new MemoryStream())
+                {
+                    file.CopyToAsync(datastream);
+                    movie.Image = datastream.ToArray();
+                }
+            }
+            Movie newMovie = new Movie { Name=movie.Name,Description=movie.Description,ReleaseDate=movie.ReleaseDate,Image=movie.Image};
+            movieRepo.Add(newMovie);
             return Content("Added Successfully");
         }
 
@@ -66,7 +78,7 @@ namespace MovieLibraryApi.Controllers
             return NoContent();
         }
 
-        [HttpDelete("id")]
+        [HttpDelete("movie/{id}")]
         public IActionResult Delete(int id)
         {
             try
