@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 
 namespace MovieLibraryApi
 {
+   
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -63,7 +64,7 @@ namespace MovieLibraryApi
             app.UseRouting();
 
             app.UseAuthorization();
-            app.UseCors();
+            app.UseCors(options => options.AllowAnyOrigin());
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

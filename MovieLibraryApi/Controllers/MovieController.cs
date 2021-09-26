@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MovieLibraryApi.Models;
 using MovieLibraryApi.Repositories;
@@ -12,6 +13,7 @@ namespace MovieLibraryApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors("AllowOrigin")]
     public class MovieController : ControllerBase
     {
         public IMovieRepository movieRepo { get; set; }
@@ -62,7 +64,7 @@ namespace MovieLibraryApi.Controllers
         }
 
         [HttpPut("{movie}/{id}")]
-        public IActionResult Put(Movie movie,int id)
+        public IActionResult Put([FromForm]Movie movie,int id)
         {
             if (!ModelState.IsValid)
             {
@@ -74,17 +76,18 @@ namespace MovieLibraryApi.Controllers
                 return BadRequest();
             }
 
-            movieRepo.Edit(movie);
+            Movie newMovie = new Movie { Name = movie.Name, Description = movie.Description, ReleaseDate = movie.ReleaseDate, Image = movie.Image };
+            movieRepo.Edit(newMovie);
             return NoContent();
         }
 
-        [HttpDelete("movie/{id}")]
+        [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
             try
             {
                 movieRepo.Delete(id);
-                return Ok();
+                return Content("Deleted Successfully");
             }
             catch (Exception ex)
             {
