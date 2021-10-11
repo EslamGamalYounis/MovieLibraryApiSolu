@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using MovieLibraryApi.Models;
 using MovieLibraryApi.Repositories;
 using System;
@@ -86,12 +87,18 @@ namespace MovieLibraryApi.Controllers
         {
             try
             {
+                var movie = movieRepo.GetById(id);
+                if (movie == null)
+                {
+                    return NotFound();
+                }
+
                 movieRepo.Delete(id);
-                return Content("Deleted Successfully");
+                return NoContent();
             }
             catch (Exception ex)
             {
-                return NotFound(ex);
+                return StatusCode(500,"Internal server error"+ex);
             }
         }
 
